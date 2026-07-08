@@ -1,0 +1,13 @@
+node_modules/
+.env
+orders.json
+npm-debug.log*
+.DS_Store
+.vscode/
+dist/
+build/
+node_modules/
+orders.json
+npm-debug.log
+.DS_Store
+.env

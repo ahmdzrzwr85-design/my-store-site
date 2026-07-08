@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>دفع بالبطاقة</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <section style="padding: 24px 0">
+        <h2>دفع بقيمة الطلب بالبطاقة</h2>
+        <div id="orderSummary" style="margin-top: 16px"></div>
+
+        <form id="cardForm" style="margin-top: 18px; max-width: 520px">
+          <label>
+            <span>اسم حامل البطاقة</span>
+            <input type="text" id="cardName" placeholder="كما هو على البطاقة" />
+          </label>
+          <label>
+            <span>رقم البطاقة</span>
+            <input
+              type="text"
+              id="cardNumber"
+              placeholder="xxxx xxxx xxxx 4242"
+            />
+          </label>
+          <label style="display: flex; gap: 8px">
+            <div style="flex: 1">
+              <span>تاريخ الانتهاء (MM/YY)</span>
+              <input type="text" id="cardExp" placeholder="MM/YY" />
+            </div>
+            <div style="width: 120px">
+              <span>CVV</span>
+              <input type="text" id="cardCvv" placeholder="123" />
+            </div>
+          </label>
+
+          <div style="margin-top: 12px">
+            <button
+              type="button"
+              class="btn btn-primary"
+              onclick="submitCard()"
+            >
+              ادفع الآن
+            </button>
+            <a
+              class="btn btn-secondary"
+              href="/cart.html"
+              style="margin-left: 8px"
+              >العودة للسلة</a
+            >
+          </div>
+
+          <p style="margin-top: 12px; color: var(--muted)">
+            تلاحظ أن هذه الصفحة محاكاة لمعالجة البطاقات — لا يُخزن سوى آخر 4
+            أرقام من البطاقة.
+          </p>
+        </form>
+
+        <div id="result" style="margin-top: 18px"></div>
+      </section>
+    </main>
+
+    <script>
+      function formatCurrencyUSD(n) {
+        return Number(n).toFixed(2) + " $";
+      }
+
+      function getPendingOrder() {
+        try {
+          return JSON.parse(localStorage.getItem("ah_pending_order") || "null");
+        } catch (e) {
+          return null;
+        }
+      }
+
+      function detectCardType(number) {
+        if (!number) return "card";
+        const n = number.replace(/\s+/g, "");
+        if (/^4/.test(n)) return "visa";
+        if (/^(5[1-5])/.test(n)) return "mastercard";
+        if (/^(34|37)/.test(n)) return "amex";
+        return "card";
+      }
+
+      function renderSummary(order) {
+        const el = document.getElementById("orderSummary");
+        if (!order) {
+          el.innerHTML = "<p>لا يوجد طلب معلق. عُد للسلة لإنشاء طلب.</p>";
+          return;
+        }
+        const items = order.items
+          .map(
+            (i) =>
+              `<li>${i.name} × ${i.quantity} — ${(i.price * i.quantity).toLocaleString()} ج</li>`,
+          )
+          .join("");
+        const totals = order.totals || {
+          subtotalUSD: order.total,
+          shippingUSD: 0,
+          totalUSD: order.total,
+          totalWeight: 0,
+        };
+        el.innerHTML = `<h3>ملخص الطلب</h3><ul>${items}</ul>
+          <p><strong>الإجمالي (دولار): ${formatCurrencyUSD(totals.totalUSD)}</strong></p>
+          <p>الوزن الكلي: ${totals.totalWeight || 0} كجم — شحن: ${formatCurrencyUSD(totals.shippingUSD || 0)}</p>`;
+      }
+
+      async function submitCard() {
+        const order = getPendingOrder();
+        if (!order) {
+          alert("لا يوجد طلب معلق");
+          return;
+        }
+        const name = document.getElementById("cardName").value.trim();
+        const number = document
+          .getElementById("cardNumber")
+          .value.replace(/\D/g, "");
+        const exp = document.getElementById("cardExp").value.trim();
+        const cvv = document.getElementById("cardCvv").value.trim();
+        if (!name || !number || !exp || !cvv) {
+          alert("اكمل بيانات البطاقة");
+          return;
+        }
+        const last4 = number.slice(-4);
+        const type = detectCardType(number);
+        // simulate tokenization (do NOT use in production)
+        const token = "tok_" + Math.random().toString(36).slice(2, 10);
+
+        try {
+          const resp = await fetch("/api/card-pay", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ order, card: { type, last4, token } }),
+          });
+          if (!resp.ok) {
+            const txt = await resp.text();
+            throw new Error(txt || "خطأ في الدفع");
+          }
+          const data = await resp.json();
+          document.getElementById("result").innerHTML =
+            `<p><strong>تم الدفع بنجاح (رقم الطلب ${data.orderId})</strong></p><a class="btn btn-primary" href="/ab.html">العودة للمتجر</a>`;
+          localStorage.removeItem("ah_pending_order");
+          localStorage.removeItem("ah_cart");
+        } catch (err) {
+          document.getElementById("result").innerHTML =
+            `<p style="color:var(--danger)">فشل عملية الدفع: ${err.message || err}</p><a class="btn btn-secondary" href="/cart.html">العودة للسلة</a>`;
+        }
+      }
+
+      (function () {
+        renderSummary(getPendingOrder());
+      })();
+    </script>
+  </body>
+</html>

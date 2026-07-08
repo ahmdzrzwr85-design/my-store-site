@@ -1,0 +1,12 @@
+{
+  "name": "ah-store",
+  "version": "1.0.0",
+  "description": "Simple order storage backend for A.H storefront.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.4"
+  }
+}
