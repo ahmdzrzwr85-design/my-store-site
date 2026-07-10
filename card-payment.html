@@ -46,7 +46,7 @@
             </button>
             <a
               class="btn btn-secondary"
-              href="/cart.html"
+              href="cart.html"
               style="margin-left: 8px"
               >العودة للسلة</a
             >
@@ -140,7 +140,7 @@
           }
           const data = await resp.json();
           document.getElementById("result").innerHTML =
-            `<p><strong>تم الدفع بنجاح (رقم الطلب ${data.orderId})</strong></p><a class="btn btn-primary" href="/ab.html">العودة للمتجر</a>`;
+            `<p><strong>تم الدفع بنجاح (رقم الطلب ${data.orderId})</strong></p><a class="btn btn-primary" href="index.html">العودة للمتجر</a>`;
           localStorage.removeItem("ah_pending_order");
           localStorage.removeItem("ah_cart");
         } catch (err) {

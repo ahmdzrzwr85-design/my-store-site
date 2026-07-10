@@ -40,7 +40,7 @@ git push -u origin main
 
 6. تحقق من عمل الموقع
 
-- افتح الرابط الذي وفّره Render، افتح `ab.html` (مثلاً `https://your-service.onrender.com/ab.html`) وتحقق من أن الواجهة تعمل وطلب التخزين يعمل (orders.json سيحفظ على الخادم).
+- افتح الرابط الذي وفّره Render، افتح `index.html` (مثلاً `https://your-service.onrender.com/index.html`) وتحقق من أن الواجهة تعمل وطلب التخزين يعمل (orders.json سيحفظ على الخادم).
 
 ملاحظات أمان وتشغيلية
 
