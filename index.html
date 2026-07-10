@@ -3,7 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>A.H - معرض اعمال للملابس و الحقيبه</title>
+    <title>A.H Store - متجر أزياء وحقائب</title>
+    <meta
+      name="description"
+      content="تسوق أجمل الملابس والحقائب مع خدمة شحن سريعة ودفع آمن. A.H Store متجر متكامل للتسوق الإلكتروني."
+    />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -13,26 +17,24 @@
           <div class="brand">
             <div class="brand-logo">A.H</div>
             <div>
-              <div class="brand-title">A.H</div>
-              <div class="brand-subtitle">معرض اعمال للملابس و الحقيبه</div>
+              <div class="brand-title">A.H Store</div>
+              <div class="brand-subtitle">متجر أزياء وحقائب</div>
             </div>
           </div>
-          <nav class="main-nav">
-            <a href="about.html">من نحن</a>
-            <a href="contact.html">اتصل بنا</a>
-            <a href="privacy.html">الخصوصية</a>
-            <a href="terms.html">الشروط</a>
-            <a href="returns.html">الاسترجاع</a>
-            <a href="admin-login.html">لوحة الإدارة</a>
-          </nav>
+          <div>
+            <p>تسوق بسهولة واستلم على باب منزلك</p>
+          </div>
         </div>
 
         <div class="hero">
           <div>
-            <h1>لبيع الملابس الجاهزهA.H</h1>
-            <p></p>
+            <h1>تسوق أحدث الملابس والحقائب الآن</h1>
+            <p>
+              اكتشف تشكيلتنا المميزة من الأزياء العصرية والجودة العالية مع توصيل
+              سريع وخدمة عملاء محترفة.
+            </p>
             <div class="buttons">
-              <a href="#products" class="btn btn-primary">اذهب الي المنتجات</a>
+              <a href="#products" class="btn btn-primary">تصفح المنتجات</a>
               <button
                 class="btn btn-secondary"
                 onclick="window.location = 'cart.html'"
@@ -59,35 +61,6 @@
             <p>اكتشف مجموعتنا المختارة من الملابس والحقائب عالية الجودة.</p>
           </div>
           <p>تسوق الآن وتمتع بشحن سريع وخدمة عملاء ممتازة.</p>
-        </div>
-
-        <div class="filters-grid">
-          <label>
-            <span>بحث المنتجات</span>
-            <input
-              type="search"
-              id="searchInput"
-              placeholder="ابحث عن منتج أو وصف"
-            />
-          </label>
-          <label>
-            <span>التصنيف</span>
-            <select id="categoryFilter">
-              <option value="">الكل</option>
-              <option value="ملابس">ملابس</option>
-              <option value="حقائب">حقائب</option>
-              <option value="أحذية">أحذية</option>
-              <option value="اكسسوارات">اكسسوارات</option>
-            </select>
-          </label>
-          <label>
-            <span>أقل سعر</span>
-            <input type="number" id="minPriceFilter" placeholder="0" />
-          </label>
-          <label>
-            <span>أعلى سعر</span>
-            <input type="number" id="maxPriceFilter" placeholder="9999" />
-          </label>
         </div>
 
         <div class="grid-products" id="productGrid"></div>
@@ -150,34 +123,13 @@
           </article>
         </div>
       </section>
-
-      <section class="faq-section">
-        <h2>الأسئلة الشائعة</h2>
-        <div class="faq-grid">
-          <article class="faq-card">
-            <h4>كيف أطلب منتجاً؟</h4>
-            <p>اختر المنتج ثم اضغط على "أضف إلى السلة" واتبع خطوات الدفع.</p>
-          </article>
-          <article class="faq-card">
-            <h4>ما هي طرق الدفع المتاحة؟</h4>
-            <p>
-              يمكنك الدفع عند الاستلام أو بالدفع بالبطاقة أو فودافون كاش أو
-              Instapay.
-            </p>
-          </article>
-          <article class="faq-card">
-            <h4>ما سياسة الإرجاع؟</h4>
-            <p>
-              يمكنك الاسترجاع خلال 7 أيام بشرط أن تكون الحالة الأصلية للمنتج.
-            </p>
-          </article>
-        </div>
-      </section>
     </main>
 
     <footer class="container footer">
-      <p>© 2026 A.H. متجر ملابس وشنط الظهر.</p>
-      <p>اتصل بنا: <a href="mailto:info@ah-store.com">info@ah-store.com</a></p>
+      <p>© 2026 A.H Store. الملابس والحقائب بعناية وجودة.</p>
+      <p>
+        اتصل بنا: <a href="mailto:support@ah-store.com">support@ah-store.com</a>
+      </p>
     </footer>
 
     <button class="cart-widget" onclick="window.location = 'cart.html'">
@@ -194,7 +146,7 @@
           <div class="cart-items" id="cartItems"></div>
           <div class="cart-summary">
             <div>
-              <h3>?????? ?????</h3>
+              <h3>تفاصيل الطلب</h3>
             </div>
             <div class="checkout-form">
               <label>
@@ -229,9 +181,11 @@
               </label>
             </div>
             <ul class="order-summary">
-              <li><span></span><strong id="subtotalText">0 </strong></li>
-              <li><span></span><strong></strong></li>
-              <li><span></span><strong id="totalText">0 </strong></li>
+              <li><span>المجموع</span><strong id="subtotalText">0 </strong></li>
+              <li>
+                <span>التوصيل</span><strong id="shippingText">0.00 $</strong>
+              </li>
+              <li><span>الإجمالي</span><strong id="totalText">0 </strong></li>
             </ul>
             <div class="payment-info" id="paymentInfo">
               <p>اختر طريقة الدفع: بطاقة ائتمان أو الدفع عند الاستلام.</p>

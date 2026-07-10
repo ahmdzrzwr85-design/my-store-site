@@ -3,13 +3,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>دفع بالبطاقة</title>
+    <title>دفع آمن بالبطاقة - A.H Store</title>
+    <meta
+      name="description"
+      content="صفحة دفع آمن للطلب من متجر A.H Store. أدخل بياناتك لإكمال الدفع بطريقة محاكاة آمنة."
+    />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <main class="container">
       <section style="padding: 24px 0">
-        <h2>دفع بقيمة الطلب بالبطاقة</h2>
+        <h2>دفع آمن بالبطاقة</h2>
         <div id="orderSummary" style="margin-top: 16px"></div>
 
         <form id="cardForm" style="margin-top: 18px; max-width: 520px">
@@ -42,7 +46,7 @@
               class="btn btn-primary"
               onclick="submitCard()"
             >
-              ادفع الآن
+              ادفع الآن بأمان
             </button>
             <a
               class="btn btn-secondary"
@@ -53,8 +57,7 @@
           </div>
 
           <p style="margin-top: 12px; color: var(--muted)">
-            تلاحظ أن هذه الصفحة محاكاة لمعالجة البطاقات — لا يُخزن سوى آخر 4
-            أرقام من البطاقة.
+            هذه صفحة محاكاة لمعالجة الدفع. لا يُخزن سوى آخر 4 أرقام من البطاقة.
           </p>
         </form>
 
@@ -145,7 +148,7 @@
           localStorage.removeItem("ah_cart");
         } catch (err) {
           document.getElementById("result").innerHTML =
-            `<p style="color:var(--danger)">فشل عملية الدفع: ${err.message || err}</p><a class="btn btn-secondary" href="/cart.html">العودة للسلة</a>`;
+            `<p style="color:var(--danger)">فشل عملية الدفع: ${err.message || err}</p><a class="btn btn-secondary" href="cart.html">العودة للسلة</a>`;
         }
       }
 

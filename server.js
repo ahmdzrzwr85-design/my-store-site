@@ -8,7 +8,6 @@ const db = require("./db");
 const app = express();
 const port = process.env.PORT || 3000;
 const ordersFile = path.join(__dirname, "orders.json");
-const productsFile = path.join(__dirname, "products.json");
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
@@ -27,41 +26,7 @@ function loadOrders() {
 }
 
 function saveOrders(orders) {
-  try {
-    fs.writeFileSync(ordersFile, JSON.stringify(orders, null, 2), "utf8");
-  } catch (error) {
-    console.error("Failed to save orders:", error);
-  }
-}
-
-function loadProducts() {
-  try {
-    if (!fs.existsSync(productsFile)) {
-      return [];
-    }
-    const data = fs.readFileSync(productsFile, "utf8");
-    return JSON.parse(data || "[]");
-  } catch (error) {
-    console.error("Failed to load products:", error);
-    return [];
-  }
-}
-
-function saveProducts(products) {
-  try {
-    fs.writeFileSync(productsFile, JSON.stringify(products, null, 2), "utf8");
-  } catch (error) {
-    console.error("Failed to save products:", error);
-  }
-}
-
-function adminAuth(req, res, next) {
-  const adminPassword = process.env.ADMIN_PASSWORD || "admin123";
-  const provided = req.headers["x-admin-password"];
-  if (!provided || provided !== adminPassword) {
-    return res.status(401).json({ message: "غير مفوّض" });
-  }
-  next();
+  fs.writeFileSync(ordersFile, JSON.stringify(orders, null, 2), "utf8");
 }
 
 app.post("/api/orders", (req, res) => {
@@ -77,83 +42,9 @@ app.post("/api/orders", (req, res) => {
   res.status(201).json({ orderId: order.id, message: "تم حفظ الطلب" });
 });
 
-app.get("/api/orders", adminAuth, (req, res) => {
+app.get("/api/orders", (req, res) => {
   const orders = loadOrders();
   res.json(orders);
-});
-
-app.put("/api/orders/:id/status", adminAuth, (req, res) => {
-  const id = req.params.id;
-  const { status } = req.body;
-  if (!status) return res.status(400).json({ message: "حالة الطلب مطلوبة" });
-
-  const orders = loadOrders();
-  const order = orders.find((item) => item.id === id);
-  if (!order) return res.status(404).json({ message: "الطلب غير موجود" });
-
-  order.status = status;
-  saveOrders(orders);
-  res.json(order);
-});
-
-app.get("/api/customers", adminAuth, (req, res) => {
-  const orders = loadOrders();
-  const customers = [];
-  const seen = new Set();
-  for (const order of orders) {
-    const key = `${order.customer.name}||${order.customer.phone}`;
-    if (!seen.has(key)) {
-      seen.add(key);
-      customers.push({
-        name: order.customer.name,
-        phone: order.customer.phone,
-        address: order.customer.address,
-        lastOrder: order.date,
-      });
-    }
-  }
-  res.json(customers);
-});
-
-app.get("/api/products", (req, res) => {
-  const products = loadProducts();
-  res.json(products);
-});
-
-app.post("/api/products", adminAuth, (req, res) => {
-  const product = req.body;
-  if (!product || !product.name || !product.price || !product.category) {
-    return res.status(400).json({ message: "بيانات المنتج غير مكتملة" });
-  }
-
-  const products = loadProducts();
-  const nextId = products.reduce((max, item) => Math.max(max, item.id), 0) + 1;
-  const newProduct = { ...product, id: nextId };
-  products.push(newProduct);
-  saveProducts(products);
-
-  res.status(201).json(newProduct);
-});
-
-app.put("/api/products/:id", adminAuth, (req, res) => {
-  const id = Number(req.params.id);
-  const updates = req.body;
-  const products = loadProducts();
-  const index = products.findIndex((item) => item.id === id);
-  if (index === -1) {
-    return res.status(404).json({ message: "المنتج غير موجود" });
-  }
-  products[index] = { ...products[index], ...updates, id };
-  saveProducts(products);
-  res.json(products[index]);
-});
-
-app.delete("/api/products/:id", adminAuth, (req, res) => {
-  const id = Number(req.params.id);
-  let products = loadProducts();
-  products = products.filter((item) => item.id !== id);
-  saveProducts(products);
-  res.json({ message: "تم حذف المنتج" });
 });
 
 // Run DB migrations on startup when DATABASE_URL is set

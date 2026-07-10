@@ -1,4 +1,4 @@
-const initialProducts = [
+const products = [
   {
     id: 1,
     name: "تيشيرت قطن أنيق",
@@ -135,18 +135,6 @@ const initialProducts = [
       "https://images.pexels.com/photos/4041688/pexels-photo-4041688.jpeg?auto=compress&cs=tinysrgb&w=800",
   },
 ];
-let products = [];
-
-async function loadProductsData() {
-  try {
-    const response = await fetch("/api/products");
-    if (!response.ok) throw new Error("Unable to load products from API");
-    products = await response.json();
-  } catch (error) {
-    products = [...initialProducts];
-    console.warn("Using fallback product list:", error.message);
-  }
-}
 
 // Currency/exchange settings
 const EGP_TO_USD = 0.032; // 1 EGP -> USD (configurable)
@@ -188,26 +176,16 @@ function getCartTotals() {
   };
 }
 
-async function initPage() {
+function initPage() {
   productGrid = document.getElementById("productGrid");
   cartCount = document.getElementById("cartCount");
   cartItems = document.getElementById("cartItems");
   subtotalText = document.getElementById("subtotalText");
   totalText = document.getElementById("totalText");
+  shippingText = document.getElementById("shippingText");
   paymentInfo = document.getElementById("paymentInfo");
   cartModal = document.getElementById("cartModal");
 
-  const searchInput = document.getElementById("searchInput");
-  const categoryFilter = document.getElementById("categoryFilter");
-  const minPriceFilter = document.getElementById("minPriceFilter");
-  const maxPriceFilter = document.getElementById("maxPriceFilter");
-
-  if (searchInput) searchInput.addEventListener("input", renderProducts);
-  if (categoryFilter) categoryFilter.addEventListener("change", renderProducts);
-  if (minPriceFilter) minPriceFilter.addEventListener("input", renderProducts);
-  if (maxPriceFilter) maxPriceFilter.addEventListener("input", renderProducts);
-
-  await loadProductsData();
   renderProducts();
   updateCartDisplay();
   updatePaymentInfoText();
@@ -238,29 +216,7 @@ async function initPage() {
 
 function renderProducts() {
   if (!productGrid) return;
-
-  const query =
-    document.getElementById("searchInput")?.value.trim().toLowerCase() || "";
-  const category = document.getElementById("categoryFilter")?.value || "";
-  const minPrice = Number(
-    document.getElementById("minPriceFilter")?.value || 0,
-  );
-  const maxPrice = Number(
-    document.getElementById("maxPriceFilter")?.value || 0,
-  );
-
-  const filtered = products.filter((product) => {
-    const matchesText =
-      product.name.toLowerCase().includes(query) ||
-      product.description.toLowerCase().includes(query);
-    const matchesCategory = category ? product.category === category : true;
-    const matchesPrice =
-      product.price >= minPrice &&
-      (maxPrice === 0 || product.price <= maxPrice);
-    return matchesText && matchesCategory && matchesPrice;
-  });
-
-  productGrid.innerHTML = filtered
+  productGrid.innerHTML = products
     .map(
       (product) => `
         <article class="product-card">
@@ -269,30 +225,14 @@ function renderProducts() {
             <h3>${product.name}</h3>
             <p>${product.description}</p>
             <div class="price-row">
-              <span class="product-price">${product.price.toLocaleString()} ج (${(
-                product.price * EGP_TO_USD
-              ).toFixed(2)}$)</span>
+              <span class="product-price">${product.price.toLocaleString()} ج (${(product.price * EGP_TO_USD).toFixed(2)}$)</span>
               <button onclick="addToCart(${product.id})">أضف إلى السلة</button>
-            </div>
-            <div class="product-meta">
-              <span>فئة: ${product.category}</span>
-              <span>الوزن: ${product.weight.toFixed(2)} كجم</span>
-            </div>
-            <div class="product-actions">
-              <a href="https://wa.me/201000000000?text=أريد+الاستفسار+عن+${encodeURIComponent(
-                product.name,
-              )}" target="_blank" class="btn btn-secondary">واتساب</a>
-              <button class="btn btn-primary" onclick="shareProduct(${product.id})">مشاركة</button>
             </div>
           </div>
         </article>
       `,
     )
     .join("");
-  if (!filtered.length) {
-    productGrid.innerHTML =
-      "<p>لم يتم العثور على منتجات تطابق فلترة البحث.</p>";
-  }
 }
 
 function addToCart(productId) {
@@ -309,24 +249,6 @@ function addToCart(productId) {
   persistCart();
   updateCartDisplay();
   openCart();
-}
-
-function shareProduct(productId) {
-  const item = products.find((product) => product.id === productId);
-  if (!item) return;
-  const text = `تحقق من هذا المنتج: ${item.name} بسعر ${item.price} جنيه. ${window.location.href}`;
-
-  if (navigator.share) {
-    navigator
-      .share({ title: item.name, text, url: window.location.href })
-      .catch(() => {});
-  } else if (navigator.clipboard) {
-    navigator.clipboard.writeText(text).then(() => {
-      alert("تم نسخ رابط المنتج إلى الحافظة.");
-    });
-  } else {
-    alert("مشاركة غير مدعومة في هذا المتصفح.");
-  }
 }
 
 function updateCartDisplay() {
@@ -358,8 +280,9 @@ function updateCartDisplay() {
   const totals = getCartTotals();
   if (subtotalText)
     subtotalText.textContent = `${totals.subtotalUSD.toFixed(2)} $ (≈ ${totals.subtotalEGP.toLocaleString()} ج)`;
-  if (totalText)
-    totalText.textContent = `${totals.totalUSD.toFixed(2)} $ (شامل شحن ${totals.shippingUSD.toFixed(2)} $)`;
+  if (shippingText)
+    shippingText.textContent = `${totals.shippingUSD.toFixed(2)} $`;
+  if (totalText) totalText.textContent = `${totals.totalUSD.toFixed(2)} $`;
   persistCart();
 }
 
