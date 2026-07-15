@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>اتصل بنا - A.H Store</title>
+    <meta
+      name="description"
+      content="اتصل بفريق دعم A.H Store للحصول على المساعدة في الطلبات والاستفسارات."
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div class="topbar">
+          <div class="brand">
+            <div class="brand-logo">A.H</div>
+            <div>
+              <div class="brand-title">A.H Store</div>
+              <div class="brand-subtitle">متجر أزياء وحقائب</div>
+            </div>
+          </div>
+          <nav class="main-nav">
+            <a href="index.html">الرئيسية</a>
+            <a href="about.html">من نحن</a>
+            <a href="contact.html">اتصل بنا</a>
+            <a href="cart.html">السلة</a>
+            <a href="admin-login.html">لوحة التحكم</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="container page-content">
+      <section class="page-section">
+        <h1>اتصل بنا</h1>
+        <p>يسعدنا مساعدتك في أي استفسار حول الطلبات أو المنتجات أو الشحن.</p>
+
+        <div class="contact-grid">
+          <div class="contact-card">
+            <h3>معلومات التواصل</h3>
+            <p><strong>البريد الإلكتروني:</strong> support@ah-store.com</p>
+            <p><strong>الهاتف:</strong> 01012345678</p>
+            <p>
+              <strong>واتساب:</strong>
+              <a
+                href="https://wa.me/201012345678"
+                target="_blank"
+                rel="noreferrer"
+                >ابدأ المحادثة الآن</a
+              >
+            </p>
+          </div>
+
+          <div class="contact-card">
+            <h3>أرسل لنا رسالة</h3>
+            <form id="contactForm">
+              <label>
+                <span>الاسم</span>
+                <input
+                  type="text"
+                  id="contactName"
+                  placeholder="اسمك"
+                  required
+                />
+              </label>
+              <label>
+                <span>البريد الإلكتروني</span>
+                <input
+                  type="email"
+                  id="contactEmail"
+                  placeholder="example@mail.com"
+                  required
+                />
+              </label>
+              <label>
+                <span>الرسالة</span>
+                <textarea
+                  id="contactMessage"
+                  rows="4"
+                  placeholder="اكتب رسالتك"
+                  required
+                ></textarea>
+              </label>
+              <button type="button" class="btn btn-primary" id="contactSubmit">
+                إرسال
+              </button>
+            </form>
+            <div id="contactResult"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="container footer">
+      <p>© 2026 A.H Store</p>
+    </footer>
+
+    <script>
+      document
+        .getElementById("contactSubmit")
+        .addEventListener("click", function () {
+          var name = document.getElementById("contactName").value.trim();
+          var email = document.getElementById("contactEmail").value.trim();
+          var message = document.getElementById("contactMessage").value.trim();
+          var result = document.getElementById("contactResult");
+
+          if (!name || !email || !message) {
+            result.textContent = "يرجى ملء جميع الحقول.";
+            result.style.color = "var(--danger)";
+            return;
+          }
+
+          result.textContent = "تم استلام رسالتك. سنعود إليك قريبًا!";
+          result.style.color = "var(--primary)";
+        });
+    </script>
+  </body>
+</html>

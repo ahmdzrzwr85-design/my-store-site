@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>A.H Store - متجر أزياء وحقائب</title>
+    <title>متجر A.H - الصفحة الرئيسية</title>
     <meta
       name="description"
-      content="تسوق أجمل الملابس والحقائب مع خدمة شحن سريعة ودفع آمن. A.H Store متجر متكامل للتسوق الإلكتروني."
+      content="تسوق أحدث منتجات الأزياء والحقائب من A.H Store مع تجربة شراء عربية سهلة وآمنة."
     />
     <link rel="stylesheet" href="style.css" />
   </head>
@@ -21,187 +21,108 @@
               <div class="brand-subtitle">متجر أزياء وحقائب</div>
             </div>
           </div>
-          <div>
-            <p>تسوق بسهولة واستلم على باب منزلك</p>
-          </div>
+          <nav class="main-nav">
+            <a href="index.html">الرئيسية</a>
+            <a href="about.html">من نحن</a>
+            <a href="contact.html">اتصل بنا</a>
+            <a href="cart.html">السلة</a>
+            <a href="admin-login.html">لوحة التحكم</a>
+          </nav>
         </div>
 
         <div class="hero">
           <div>
-            <h1>تسوق أحدث الملابس والحقائب الآن</h1>
+            <h1>أحدث تشكيلات الموضة مع شحن سريع</h1>
             <p>
-              اكتشف تشكيلتنا المميزة من الأزياء العصرية والجودة العالية مع توصيل
-              سريع وخدمة عملاء محترفة.
+              تصفح المنتجات، أضف للسلة، وأتمم الطلب بسهولة مع تجربة عربية مميزة.
             </p>
-            <div class="buttons">
-              <a href="#products" class="btn btn-primary">تصفح المنتجات</a>
-              <button
-                class="btn btn-secondary"
-                onclick="window.location = 'cart.html'"
-              >
-                عرض السلة
-              </button>
+            <div class="hero-actions">
+              <a href="cart.html" class="btn btn-primary">عرض السلة</a>
+              <a href="#products" class="btn btn-secondary">تسوق الآن</a>
             </div>
           </div>
-          <div class="hero-visual">
-            <div class="hero-card">
-              <h3>أفضل العروض</h3>
-              <p>اكتشف تشكيلتنا المميزة من الملابس والحقائب بأعلى جودة.</p>
-            </div>
-          </div>
+          <img
+            src="https://images.unsplash.com/photo-1521334884684-d80222895322?auto=format&fit=crop&w=1200&q=80"
+            alt="منتجات أزياء"
+          />
         </div>
       </div>
     </header>
 
     <main class="container">
-      <section class="products" id="products">
-        <div class="section-title">
-          <div>
-            <h2>المنتجات</h2>
-            <p>اكتشف مجموعتنا المختارة من الملابس والحقائب عالية الجودة.</p>
-          </div>
-          <p>تسوق الآن وتمتع بشحن سريع وخدمة عملاء ممتازة.</p>
+      <section class="section intro-cards">
+        <div class="card">
+          <h2>منتجات مميزة</h2>
+          <p>أزياء وحقائب متجددة باستمرار وبأسعار تنافسية.</p>
         </div>
-
-        <div class="grid-products" id="productGrid"></div>
+        <div class="card">
+          <h2>دعم فوري</h2>
+          <p>خدمة عملاء عربية عبر البريد والهاتف وواتساب.</p>
+        </div>
+        <div class="card">
+          <h2>شحن آمن</h2>
+          <p>شحن سريع وتأمين على طلبك حتى يصل إليك.</p>
+        </div>
       </section>
 
-      <section class="highlights">
-        <article class="feature-card">
-          <div class="feature-icon">✓</div>
-          <div>
-            <h3>منتجات مميزة</h3>
-            <p>نحن نقدم مختارات من الملابس العصرية والجودة العالية.</p>
-          </div>
-        </article>
-        <article class="feature-card">
-          <div class="feature-icon">✓</div>
-          <div>
-            <h3>خدمة سريعة</h3>
-            <p>نضمن شحن الطلبات بسرعة وخدمة متابعة احترافية.</p>
-          </div>
-        </article>
-        <article class="feature-card">
-          <div class="feature-icon">✓</div>
-          <div>
-            <h3>ضمان الجودة</h3>
-            <p>كل منتج يتم فحصه بعناية للتأكد من جودته قبل الشحن.</p>
-          </div>
-        </article>
+      <section class="section products-grid" id="products">
+        <h2>منتجاتنا</h2>
+        <div id="productList" class="product-grid"></div>
       </section>
 
-      <section class="section-about">
-        <div class="about-grid">
-          <article class="about-card">
-            <h3>عن A.H</h3>
-            <p>
-              متجر A.H متخصص في بيع الملابس الجاهزة والحقائب ذات التصميم العصري.
-              نسعى لتقديم تجربة تسوق مريحة وجودة عالية لجميع العملاء.
-            </p>
-            <ul class="order-summary">
-              <li><span>مدة التسليم</span><strong>1-2 يوم</strong></li>
-              <li>
-                <span>الدفع</span
-                ><strong>عند الاستلام أو بطاقة الائتمان</strong>
-              </li>
-              <li><span>الدعم</span><strong>متاح طوال 7 أيام</strong></li>
-            </ul>
-          </article>
-          <article class="about-card">
-            <h3>لماذا تختارنا</h3>
-            <p>
-              نقدم منتجات موثوقة وخدمة عملاء سريعة، مع دعم دائم لتلبية
-              احتياجاتك.
-            </p>
-            <div class="payment-info">
-              <p><strong>خدمة العملاء:</strong> متاحة طوال اليوم.</p>
-              <p>
-                <strong>استبدال سهلة:</strong> يمكنك استبدال المنتجات خلال 7
-                أيام.
-              </p>
-            </div>
-          </article>
+      <section class="section filters-panel">
+        <h2>بحث وتصفيه</h2>
+        <div class="filters-row">
+          <label>
+            <span>ابحث عن منتج</span>
+            <input type="search" id="searchInput" placeholder="ابحث هنا" />
+          </label>
+          <label>
+            <span>الفئة</span>
+            <select id="categoryFilter">
+              <option value="all">كل الفئات</option>
+            </select>
+          </label>
+          <label>
+            <span>الفرز حسب السعر</span>
+            <select id="sortSelect">
+              <option value="default">الافتراضي</option>
+              <option value="asc">من الأقل للأعلى</option>
+              <option value="desc">من الأعلى للأقل</option>
+            </select>
+          </label>
         </div>
+      </section>
+
+      <section class="section features-grid">
+        <article class="feature-box">
+          <h3>صفحات قانونية</h3>
+          <p>
+            <a href="privacy.html">سياسة الخصوصية</a>،
+            <a href="terms.html">الشروط</a>،
+            <a href="returns.html">الاسترجاع</a>
+          </p>
+        </article>
+        <article class="feature-box">
+          <h3>معلومات المتجر</h3>
+          <p>
+            <a href="about.html">من نحن</a> و<a href="contact.html">اتصل بنا</a>
+            للحصول على الدعم.
+          </p>
+        </article>
+        <article class="feature-box">
+          <h3>إدارة المتجر</h3>
+          <p>
+            <a href="admin-login.html">تسجيل الدخول للإدارة</a> لمراقبة الطلبات
+            والمنتجات.
+          </p>
+        </article>
       </section>
     </main>
 
     <footer class="container footer">
-      <p>© 2026 A.H Store. الملابس والحقائب بعناية وجودة.</p>
-      <p>
-        اتصل بنا: <a href="mailto:support@ah-store.com">support@ah-store.com</a>
-      </p>
+      <p>© 2026 A.H Store</p>
     </footer>
-
-    <button class="cart-widget" onclick="window.location = 'cart.html'">
-      <span id="cartCount">0</span> منتج في السلة
-    </button>
-
-    <div class="modal" id="cartModal" aria-hidden="true">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2>سلة المشتريات</h2>
-          <button class="modal-close" onclick="closeCart()">×</button>
-        </div>
-        <div class="modal-body">
-          <div class="cart-items" id="cartItems"></div>
-          <div class="cart-summary">
-            <div>
-              <h3>تفاصيل الطلب</h3>
-            </div>
-            <div class="checkout-form">
-              <label>
-                <span>الاسم</span>
-                <input type="text" id="customerName" placeholder="اكتب اسمك" />
-              </label>
-              <label>
-                <span>رقم الهاتف</span>
-                <input
-                  type="tel"
-                  id="customerPhone"
-                  placeholder="010xxxxxxxx"
-                />
-              </label>
-              <label>
-                <span>العنوان</span>
-                <textarea
-                  id="customerAddress"
-                  placeholder="عنوان التوصيل"
-                  rows="3"
-                ></textarea>
-              </label>
-            </div>
-            <div class="payment-methods">
-              <label class="payment-option">
-                <span>بطاقة ائتمان</span>
-                <input type="radio" name="payment" value="card" />
-              </label>
-              <label class="payment-option">
-                <span>الدفع عند الاستلام</span>
-                <input type="radio" name="payment" value="cod" checked />
-              </label>
-            </div>
-            <ul class="order-summary">
-              <li><span>المجموع</span><strong id="subtotalText">0 </strong></li>
-              <li>
-                <span>التوصيل</span><strong id="shippingText">0.00 $</strong>
-              </li>
-              <li><span>الإجمالي</span><strong id="totalText">0 </strong></li>
-            </ul>
-            <div class="payment-info" id="paymentInfo">
-              <p>اختر طريقة الدفع: بطاقة ائتمان أو الدفع عند الاستلام.</p>
-            </div>
-            <div class="checkout-actions">
-              <button class="btn btn-secondary" onclick="closeCart()">
-                إغلاق
-              </button>
-              <button class="btn btn-primary" onclick="checkout()">
-                إتمام الطلب
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <script src="script.js"></script>
   </body>

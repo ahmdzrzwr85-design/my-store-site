@@ -29,20 +29,65 @@ function saveOrders(orders) {
   fs.writeFileSync(ordersFile, JSON.stringify(orders, null, 2), "utf8");
 }
 
-app.post("/api/orders", (req, res) => {
-  const order = req.body;
-  if (!order || !Array.isArray(order.items) || order.items.length === 0) {
-    return res.status(400).json({ message: "طلب غير صالح" });
+async function saveOrderToDatabase(order) {
+  await db.query(
+    `INSERT INTO orders (id, customer, items, totals, payment_method, payment, date)
+     VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+    [
+      order.id,
+      order.customer,
+      order.items,
+      order.totals,
+      order.paymentMethod || null,
+      order.payment || null,
+      order.date,
+    ],
+  );
+}
+
+async function saveOrder(order) {
+  if (process.env.DATABASE_URL) {
+    try {
+      await saveOrderToDatabase(order);
+      return;
+    } catch (err) {
+      console.error("فشل حفظ الطلب في قاعدة البيانات، سيتم الرجوع إلى orders.json:", err.message || err);
+    }
   }
 
   const orders = loadOrders();
   orders.push(order);
   saveOrders(orders);
+}
 
-  res.status(201).json({ orderId: order.id, message: "تم حفظ الطلب" });
+app.post("/api/orders", async (req, res) => {
+  const order = req.body;
+  if (!order || !Array.isArray(order.items) || order.items.length === 0) {
+    return res.status(400).json({ message: "طلب غير صالح" });
+  }
+
+  try {
+    await saveOrder(order);
+    res.status(201).json({ orderId: order.id, message: "تم حفظ الطلب" });
+  } catch (err) {
+    res.status(500).json({ message: "فشل حفظ الطلب" });
+  }
 });
 
-app.get("/api/orders", (req, res) => {
+app.get("/api/orders", async (req, res) => {
+  if (process.env.DATABASE_URL) {
+    try {
+      const result = await db.query(
+        `SELECT id, customer, items, totals, payment_method AS "paymentMethod", payment, date
+         FROM orders
+         ORDER BY date DESC`,
+      );
+      return res.json(result.rows);
+    } catch (err) {
+      console.error("فشل جلب الطلبات من قاعدة البيانات:", err.message || err);
+    }
+  }
+
   const orders = loadOrders();
   res.json(orders);
 });
@@ -193,13 +238,14 @@ app.post("/api/card-pay", (req, res) => {
     },
   };
 
-  const orders = loadOrders();
-  orders.push(order);
-  saveOrders(orders);
-
-  return res
-    .status(201)
-    .json({ orderId: order.id, message: "تمت معالجة الدفع وحفظ الطلب" });
+  try {
+    await saveOrder(order);
+    return res
+      .status(201)
+      .json({ orderId: order.id, message: "تمت معالجة الدفع وحفظ الطلب" });
+  } catch (err) {
+    return res.status(500).json({ message: "فشل معالجة الدفع" });
+  }
 });
 
 app.listen(port, () => {

@@ -17,3 +17,13 @@ CREATE TABLE IF NOT EXISTS payouts (
   metadata JSONB,
   created_at TIMESTAMPTZ DEFAULT now()
 );
+
+CREATE TABLE IF NOT EXISTS orders (
+  id TEXT PRIMARY KEY,
+  customer JSONB NOT NULL,
+  items JSONB NOT NULL,
+  totals JSONB NOT NULL,
+  payment_method VARCHAR(32),
+  payment JSONB,
+  date TIMESTAMPTZ NOT NULL DEFAULT now()
+);
