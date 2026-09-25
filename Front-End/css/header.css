@@ -1,0 +1,68 @@
+.site-header {
+  position: sticky;
+  top: 0;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(17, 17, 17, 0.05);
+  z-index: 30;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 82px;
+}
+
+.brand-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #ff7a00, #ffb14d);
+  color: white;
+  border-radius: 14px;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.brand-name {
+  font-weight: 900;
+  font-size: 20px;
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  font-weight: 700;
+}
+
+.main-nav a {
+  color: #1e1e1e;
+}
+
+.main-nav a.active,
+.main-nav a:hover {
+  color: #d95d00;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon-btn {
+  width: 42px;
+  height: 42px;
+  border: 1px solid #ececec;
+  border-radius: 12px;
+  background: white;
+}

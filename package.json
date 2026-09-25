@@ -1,0 +1,21 @@
+{
+  "name": "zar-zor",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "web:dev": "npm run dev --workspace apps/web",
+    "web:build": "npm run build --workspace apps/web",
+    "web:start": "npm run start --workspace apps/web",
+    "api:dev": "npm run dev --workspace apps/api",
+    "api:build": "npm run build --workspace apps/api",
+    "api:start": "npm run start --workspace apps/api",
+    "db:generate": "npm run db:generate --workspace apps/api",
+    "db:validate": "npm run db:validate --workspace apps/api",
+    "db:migrate": "npm run db:migrate --workspace apps/api",
+    "db:seed": "npm run db:seed --workspace apps/api",
+    "db:studio": "npm run db:studio --workspace apps/api"
+  }
+}

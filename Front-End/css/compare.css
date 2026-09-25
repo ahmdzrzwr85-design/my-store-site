@@ -1,0 +1,121 @@
+.compare-tray {
+  position: fixed;
+  right: 20px;
+  left: 20px;
+  bottom: 20px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  max-width: 1160px;
+  margin: auto;
+  padding: 16px 20px;
+  background: #111;
+  color: white;
+  border-radius: 18px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.compare-tray small {
+  display: block;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.compare-tray-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.compare-tray .btn-secondary {
+  background: transparent;
+  color: white;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.compare-tray .btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.compare-select {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 3;
+  padding: 7px 10px;
+  border-radius: 10px;
+  background: white;
+  color: #111;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.compare-select input {
+  accent-color: var(--primary);
+  margin-left: 4px;
+}
+
+.compare-table-wrap {
+  overflow-x: auto;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+}
+
+.compare-table {
+  width: 100%;
+  min-width: 620px;
+  border-collapse: collapse;
+}
+
+.compare-table th,
+.compare-table td {
+  padding: 20px;
+  text-align: right;
+  border-bottom: 1px solid var(--line);
+}
+
+.compare-table thead th {
+  background: #fff8f1;
+  color: var(--primary-dark);
+  font-size: 18px;
+}
+
+.compare-table tbody th {
+  width: 170px;
+  background: #fafafa;
+}
+
+.compare-clear-page {
+  margin-top: 18px;
+}
+
+.empty-compare {
+  padding: 54px 24px;
+  text-align: center;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+}
+
+.empty-compare p {
+  margin: 10px 0 22px;
+  color: var(--muted);
+}
+
+@media (max-width: 640px) {
+  .compare-tray {
+    right: 10px;
+    left: 10px;
+    bottom: 10px;
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .compare-tray-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}

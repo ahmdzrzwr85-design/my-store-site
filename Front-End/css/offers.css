@@ -1,0 +1,27 @@
+.offer-banner {
+  background: linear-gradient(135deg, #111111, #222222);
+  color: white;
+  border-radius: 24px;
+  padding: 22px 24px;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 28px;
+}
+
+.offers-page .product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+@media (max-width: 900px) {
+  .offers-page .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .offers-page .product-grid {
+    grid-template-columns: 1fr;
+  }
+}

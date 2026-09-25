@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>المنتجات | ZAR ZOR</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+    <link rel="stylesheet" href="css/header.css" />
+    <link rel="stylesheet" href="css/footer.css" />
+    <link rel="stylesheet" href="css/products.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <div class="brand-wrap">
+          <div class="brand-logo">Z</div>
+          <div>
+            <div class="brand-name">ZAR ZOR</div>
+          </div>
+        </div>
+        <nav class="main-nav">
+          <a href="index.html">الرئيسية</a>
+          <a href="categories.html">الأقسام</a>
+          <a href="offers.html">العروض</a>
+          <a href="products.html" class="active">الأكثر مبيعًا</a>
+          <a href="blog.html">المدونة</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <div class="container product-layout">
+        <aside class="filters-panel">
+          <h3>تصفية المنتجات</h3>
+
+          <div class="filter-group">
+            <label>السعر</label>
+            <select>
+              <option>كل الأسعار</option>
+              <option>أقل من 500 ج</option>
+              <option>500 - 1500 ج</option>
+              <option>1500 - 5000 ج</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>التقييم</label>
+            <select>
+              <option>جميع التقييمات</option>
+              <option>4.5 +</option>
+              <option>4.8 +</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>المتجر</label>
+            <select>
+              <option>كل المتاجر</option>
+              <option>Amazon</option>
+              <option>Jumia</option>
+              <option>Noon</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>ترتيب</label>
+            <select>
+              <option>الأحدث</option>
+              <option>السعر: من الأقل</option>
+              <option>الأعلى تقييمًا</option>
+            </select>
+          </div>
+        </aside>
+
+        <section class="products-panel">
+          <div class="toolbar">
+            <div class="search-box small">
+              <input type="text" placeholder="ابحث عن منتج" />
+              <button>بحث</button>
+            </div>
+            <div class="toolbar-actions">
+              <button class="chip">المفضلة</button>
+              <a class="chip" href="compare.html">فتح المقارنة</a>
+            </div>
+          </div>
+
+          <div class="product-grid products-list">
+            <article
+              class="product-card compare-product"
+              data-compare-id="smart-watch"
+              data-category="ساعات ذكية"
+              data-price="١٬٢٩٩ ج"
+              data-rating="4.8"
+              data-store="Amazon"
+            >
+              <div class="badge badge-hot">خصم قوي</div>
+              <label class="compare-select"
+                ><input type="checkbox" class="compare-check" /> أضف
+                للمقارنة</label
+              >
+              <img
+                src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=80"
+                alt="منتج"
+              />
+              <div class="product-body">
+                <h3>ساعة ذكية بميزة القياس</h3>
+                <div class="price-row">
+                  <span class="current-price">١٬٢٩٩ ج</span>
+                  <span class="old-price">١٬٩٩٩ ج</span>
+                </div>
+                <div class="meta-row">
+                  <span>خصم 35%</span>
+                  <span>⭐ 4.8</span>
+                </div>
+                <div class="store-row">
+                  <span>Amazon</span>
+                  <a class="btn btn-link" href="product-details.html"
+                    >شوف العرض</a
+                  >
+                </div>
+              </div>
+            </article>
+
+            <article
+              class="product-card compare-product"
+              data-compare-id="wireless-headphones"
+              data-category="سماعات وصوتيات"
+              data-price="٩٩٩ ج"
+              data-rating="4.7"
+              data-store="Jumia"
+            >
+              <div class="badge badge-featured">اختيارنا</div>
+              <label class="compare-select"
+                ><input type="checkbox" class="compare-check" /> أضف
+                للمقارنة</label
+              >
+              <img
+                src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad?auto=format&fit=crop&w=900&q=80"
+                alt="منتج"
+              />
+              <div class="product-body">
+                <h3>سماعات لاسلكية</h3>
+                <div class="price-row">
+                  <span class="current-price">٩٩٩ ج</span>
+                  <span class="old-price">١٬٥٩٩ ج</span>
+                </div>
+                <div class="meta-row">
+                  <span>خصم 38%</span>
+                  <span>⭐ 4.7</span>
+                </div>
+                <div class="store-row">
+                  <span>Jumia</span>
+                  <a class="btn btn-link" href="product-details.html"
+                    >شوف العرض</a
+                  >
+                </div>
+              </div>
+            </article>
+
+            <article
+              class="product-card compare-product"
+              data-compare-id="smartphone"
+              data-category="موبايلات"
+              data-price="٥٬٦٩٩ ج"
+              data-rating="4.9"
+              data-store="Noon"
+            >
+              <div class="badge badge-hot">أكثر طلبًا</div>
+              <label class="compare-select"
+                ><input type="checkbox" class="compare-check" /> أضف
+                للمقارنة</label
+              >
+              <img
+                src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=80"
+                alt="منتج"
+              />
+              <div class="product-body">
+                <h3>هاتف ذكي</h3>
+                <div class="price-row">
+                  <span class="current-price">٥٬٦٩٩ ج</span>
+                  <span class="old-price">٦٬٩٩٩ ج</span>
+                </div>
+                <div class="meta-row">
+                  <span>خصم 19%</span>
+                  <span>⭐ 4.9</span>
+                </div>
+                <div class="store-row">
+                  <span>Noon</span>
+                  <a class="btn btn-link" href="product-details.html"
+                    >شوف العرض</a
+                  >
+                </div>
+              </div>
+            </article>
+
+            <article
+              class="product-card compare-product"
+              data-compare-id="camera-4k"
+              data-category="كاميرات وتصوير"
+              data-price="٣٬٥٩٩ ج"
+              data-rating="4.6"
+              data-store="Temu"
+            >
+              <label class="compare-select"
+                ><input type="checkbox" class="compare-check" /> أضف
+                للمقارنة</label
+              >
+              <img
+                src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&w=900&q=80"
+                alt="منتج"
+              />
+              <div class="product-body">
+                <h3>كاميرا 4K</h3>
+                <div class="price-row">
+                  <span class="current-price">٣٬٥٩٩ ج</span>
+                  <span class="old-price">٤٬٩٩٩ ج</span>
+                </div>
+                <div class="meta-row">
+                  <span>خصم 28%</span>
+                  <span>⭐ 4.6</span>
+                </div>
+                <div class="store-row">
+                  <span>Temu</span>
+                  <a class="btn btn-link" href="product-details.html"
+                    >شوف العرض</a
+                  >
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <aside class="compare-tray" id="compare-tray" aria-live="polite">
+      <div>
+        <strong><span id="compare-count">0</span> منتجات محددة</strong>
+        <small>اختر منتجين على الأقل للمقارنة</small>
+      </div>
+      <div class="compare-tray-actions">
+        <button class="btn btn-primary" id="compare-now" type="button" disabled>
+          قارن الآن
+        </button>
+        <button class="btn btn-secondary" id="clear-compare" type="button">
+          مسح
+        </button>
+      </div>
+    </aside>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <div class="brand-wrap">
+            <div class="brand-logo">Z</div>
+            <div><div class="brand-name">ZAR ZOR</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="copyright">© 2026 ZAR ZOR</div>
+    </footer>
+    <script src="js/main.js"></script>
+  </body>
+</html>
