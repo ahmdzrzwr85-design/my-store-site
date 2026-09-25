@@ -390,8 +390,8 @@ select {
 .site-header {
   position: sticky;
   top: 0;
-  z-index: 10;
-  background: rgba(255, 255, 255, 0.92);
+  z-index: 50;
+  background-color: #ffffff;
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(17, 17, 17, 0.06);
 }
@@ -425,6 +425,9 @@ select {
 .brand-name {
   font-weight: 900;
   font-size: 20px;
+  direction: ltr;
+  unicode-bidi: isolate;
+  white-space: nowrap;
 }
 
 .main-nav {

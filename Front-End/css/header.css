@@ -1,10 +1,10 @@
 .site-header {
   position: sticky;
   top: 0;
-  background: rgba(255, 255, 255, 0.92);
+  background-color: #ffffff;
   backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(17, 17, 17, 0.05);
-  z-index: 30;
+  z-index: 50;
 }
 
 .header-inner {
@@ -35,6 +35,9 @@
 .brand-name {
   font-weight: 900;
   font-size: 20px;
+  direction: ltr;
+  unicode-bidi: isolate;
+  white-space: nowrap;
 }
 
 .main-nav {

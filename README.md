@@ -10,17 +10,15 @@ Affiliate electronics catalog with two maintained application surfaces:
 
 ## Static site
 
-Run the static site locally from the repository root:
+Run the public static site from its own directory so administration files are not served alongside it:
 
 ```powershell
-python -m http.server 8081 --directory .
+python -m http.server 8081 --directory Front-End
 ```
 
-Open `http://localhost:8081/Front-End/`.
+Open `http://localhost:8081/`.
 
-For a Vercel project serving the static website, set the Vercel **Root Directory** to `Front-End`. No build command is required; that directory contains `index.html` and its relative assets.
-
-The repository root also contains a small `index.html` redirect so the complete repository can be opened directly by static hosts. Keep the Vercel Root Directory empty when deploying the complete repository; use `Front-End` when deploying only the public frontend.
+For a Vercel project serving the static website, set the Vercel **Root Directory** to `Front-End`. No build command is required; that directory contains `index.html` and its relative assets. Do not deploy the repository root as a static site because it also contains administration source files.
 
 ## Workspace applications
 
@@ -43,6 +41,10 @@ npm run api:dev
 ```
 
 The API uses `DATABASE_URL` from the root environment. Copy `.env.example` to `.env` and configure PostgreSQL before running Prisma commands.
+
+Set `ADMIN_EMAIL` and a strong, unique `ADMIN_PASSWORD` in the root `.env`; those values are the only admin login. Never commit `.env`. The API compares the submitted credentials to these environment values and issues an eight-hour, HTTP-only signed cookie. Keep `WEB_ORIGIN` and `NEXT_PUBLIC_API_URL` aligned with your app URLs, and use HTTPS in production.
+
+The Next.js app protects `/admin/*` and legacy `/Admin-Panel/*` URLs. The API protects admin data and product writes independently of the browser UI. Public storefront pages remain in `Front-End/`.
 
 ## Static site structure
 

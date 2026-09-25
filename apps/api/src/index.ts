@@ -1,13 +1,74 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import { createHmac, timingSafeEqual } from "node:crypto";
+import { fileURLToPath } from "node:url";
+import type { NextFunction, Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 
-dotenv.config();
+dotenv.config({
+  path: fileURLToPath(new URL("../../../.env", import.meta.url)),
+});
 
 const app = express();
 const prisma = new PrismaClient();
 const port = Number(process.env.PORT || 4000);
+const sessionCookie = "zz_admin_session";
+
+const signSession = () => {
+  const secret = process.env.ADMIN_PASSWORD;
+  if (!secret) throw new Error("ADMIN_PASSWORD is required");
+  const payload = Buffer.from(
+    JSON.stringify({ isAdmin: true, exp: Date.now() + 8 * 60 * 60 * 1000 }),
+  ).toString("base64url");
+  const signature = createHmac("sha256", secret)
+    .update(payload)
+    .digest("base64url");
+  return `${payload}.${signature}`;
+};
+
+const requireAdmin = (req: Request, res: Response, next: NextFunction) => {
+  const token = req.headers.cookie
+    ?.split(";")
+    .map((part) => part.trim())
+    .find((part) => part.startsWith(`${sessionCookie}=`))
+    ?.slice(sessionCookie.length + 1);
+  const [payload, signature] = token?.split(".") ?? [];
+  const secret = process.env.ADMIN_PASSWORD;
+
+  if (!payload || !signature || !secret) {
+    res.status(401).json({ error: "يلزم تسجيل دخول مدير" });
+    return;
+  }
+
+  const expected = createHmac("sha256", secret).update(payload).digest();
+  let supplied: Buffer;
+  try {
+    supplied = Buffer.from(signature, "base64url");
+  } catch {
+    res.status(401).json({ error: "جلسة غير صالحة" });
+    return;
+  }
+  if (
+    supplied.length !== expected.length ||
+    !timingSafeEqual(supplied, expected)
+  ) {
+    res.status(401).json({ error: "جلسة غير صالحة" });
+    return;
+  }
+
+  try {
+    const session = JSON.parse(Buffer.from(payload, "base64url").toString());
+    if (session.isAdmin !== true || session.exp <= Date.now()) {
+      res.status(401).json({ error: "انتهت صلاحية الجلسة" });
+      return;
+    }
+  } catch {
+    res.status(401).json({ error: "جلسة غير صالحة" });
+    return;
+  }
+  next();
+};
 
 const slugFromText = (value: string, fallback: string) => {
   const slug = value
@@ -18,17 +79,75 @@ const slugFromText = (value: string, fallback: string) => {
   return slug || `${fallback}-${Date.now()}`;
 };
 
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.WEB_ORIGIN || "http://localhost:3000",
+    credentials: true,
+  }),
+);
 app.use(express.json());
 
 app.get("/api/health", (_req, res) => {
   res.json({ ok: true, service: "zar-zor-api" });
 });
 
+app.post("/api/auth/login", async (req, res) => {
+  const { email, password } = req.body as Record<string, unknown>;
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  if (!adminEmail || !adminPassword) {
+    res.status(503).json({ error: "بيانات دخول المدير غير مضبوطة في .env" });
+    return;
+  }
+  const emailMatches =
+    typeof email === "string" &&
+    Buffer.byteLength(email.trim()) === Buffer.byteLength(adminEmail) &&
+    timingSafeEqual(Buffer.from(email.trim()), Buffer.from(adminEmail));
+  const passwordMatches =
+    typeof password === "string" &&
+    Buffer.byteLength(password) === Buffer.byteLength(adminPassword) &&
+    timingSafeEqual(Buffer.from(password), Buffer.from(adminPassword));
+  if (!emailMatches || !passwordMatches) {
+    res.status(401).json({ error: "بيانات خاطئة" });
+    return;
+  }
+
+  const token = signSession();
+  res.cookie(sessionCookie, token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 8 * 60 * 60 * 1000,
+  });
+  res.json({ ok: true });
+});
+
+app.post("/api/auth/logout", (_req, res) => {
+  res.clearCookie(sessionCookie, {
+    httpOnly: true,
+    sameSite: "lax",
+    path: "/",
+  });
+  res.json({ ok: true });
+});
+
+app.get("/api/admin/stores", requireAdmin, async (_req, res) => {
+  try {
+    const stores = await prisma.store.findMany({
+      orderBy: { createdAt: "desc" },
+    });
+    res.json({ stores });
+  } catch (error) {
+    console.error("Failed to load stores", error);
+    res.status(500).json({ error: "تعذر تحميل المتاجر" });
+  }
+});
+
 app.get("/api/products", async (_req, res) => {
   try {
     const products = await prisma.product.findMany({
-      where: { isActive: true },
+      where: { isActive: true, isPublished: true },
       include: { category: true, store: true },
       orderBy: { createdAt: "desc" },
     });
@@ -40,7 +159,7 @@ app.get("/api/products", async (_req, res) => {
   }
 });
 
-app.post("/api/products", async (req, res) => {
+app.post("/api/products", requireAdmin, async (req, res) => {
   const {
     name,
     description,

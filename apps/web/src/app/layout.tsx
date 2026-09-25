@@ -3,7 +3,11 @@ import React from "react";
 
 export const metadata: Metadata = {
   title: "ZAR ZOR",
-  description: "Frontend separate from API",
+  description: "متجر ZAR ZOR للإلكترونيات والعروض الذكية",
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export default function RootLayout({
@@ -12,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="ar" dir="rtl">
       <body>{children}</body>
     </html>
   );

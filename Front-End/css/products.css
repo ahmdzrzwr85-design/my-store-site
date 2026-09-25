@@ -172,6 +172,18 @@
 }
 
 @media (max-width: 640px) {
+  .product-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .product-layout > * {
+    min-width: 0;
+  }
+
+  .toolbar-actions {
+    flex-wrap: wrap;
+  }
+
   .product-grid {
     grid-template-columns: 1fr;
   }

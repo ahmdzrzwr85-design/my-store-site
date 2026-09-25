@@ -1,20 +1,12 @@
 import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcryptjs";
+import dotenv from "dotenv";
+import { fileURLToPath } from "node:url";
+
+dotenv.config({ path: fileURLToPath(new URL("../.env", import.meta.url)) });
 
 const prisma = new PrismaClient();
 
 async function main() {
-  const passwordHash = await bcrypt.hash("local-admin", 12);
-  const admin = await prisma.adminUser.upsert({
-    where: { email: "admin@localhost.test" },
-    update: { passwordHash, role: "SUPER_ADMIN" },
-    create: {
-      email: "admin@localhost.test",
-      passwordHash,
-      name: "Local Admin",
-      role: "SUPER_ADMIN",
-    },
-  });
   const category = await prisma.category.upsert({
     where: { slug: "featured" },
     update: {},
@@ -97,11 +89,10 @@ async function main() {
     data: {
       action: "seed",
       entity: "system",
-      details: `Seeded by ${admin.email}`,
-      adminId: admin.id,
+      details: "Seeded local catalog",
     },
   });
-  console.log("Local seed complete. Login: admin@localhost.test / local-admin");
+  console.log("Local catalog seed complete.");
 }
 
 main().finally(() => prisma.$disconnect());

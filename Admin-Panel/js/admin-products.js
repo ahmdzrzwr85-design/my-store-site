@@ -23,7 +23,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const loadProducts = async () => {
     try {
-      const response = await fetch(`${API_BASE}/products`);
+      const response = await fetch(`${API_BASE}/products`, {
+        credentials: "include",
+      });
       if (!response.ok) throw new Error("load failed");
       const data = await response.json();
       renderProducts(data.products || []);
@@ -51,6 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const response = await fetch(`${API_BASE}/products`, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
