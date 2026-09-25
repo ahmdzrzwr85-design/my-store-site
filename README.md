@@ -20,6 +20,8 @@ Open `http://localhost:8081/`.
 
 For a Vercel project serving the static website, set the Vercel **Root Directory** to `Front-End`. No build command is required; that directory contains `index.html` and its relative assets. Do not deploy the repository root as a static site because it also contains administration source files.
 
+GitHub Pages deploys the public storefront from `Front-End/` through `.github/workflows/deploy-pages.yml`. Enable Pages once in the repository's **Settings > Pages** and select **GitHub Actions** as the source. This static deployment does not host the Next.js admin app or Express API.
+
 ## Workspace applications
 
 Install dependencies from the repository root:
