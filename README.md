@@ -54,14 +54,9 @@ The Next.js app protects `/admin/*` and legacy `/Admin-Panel/*` URLs. The API pr
 Front-End/
 ├── index.html
 ├── *.html
-├── legal/
-├── css/
-├── js/
-├── assets/
-│   ├── fonts/
-│   ├── icons/
-│   └── images/
-└── data/
+├── *.css
+├── *.js
+└── favicon and touch icons
 
 Admin-Panel/
 ├── pages/

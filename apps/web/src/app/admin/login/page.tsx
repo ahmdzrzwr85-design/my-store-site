@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 
-const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
+const apiBase = process.env.NEXT_PUBLIC_API_URL || "/api";
 
 export default function AdminLoginPage() {
   const [error, setError] = useState("");

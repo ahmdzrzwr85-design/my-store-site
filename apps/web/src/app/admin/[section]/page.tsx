@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
 const sections: Record<string, string> = {
   products: "المنتجات",
@@ -9,7 +9,16 @@ const sections: Record<string, string> = {
   offers: "العروض",
   analytics: "التحليلات",
 };
-const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
+const apiBase = process.env.NEXT_PUBLIC_API_URL || "/api";
+
+type Product = {
+  id: string;
+  name: string;
+  price: number | null;
+  isPublished: boolean;
+  isDeal: boolean;
+  category: { name: string } | null;
+};
 
 export default function AdminSectionPage({
   params,
@@ -18,16 +27,29 @@ export default function AdminSectionPage({
 }) {
   const title = sections[params.section];
   const [stores, setStores] = useState<string[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    if (params.section !== "stores") return;
-    fetch(`${apiBase}/admin/stores`, { credentials: "include" })
+    const endpoint =
+      params.section === "stores"
+        ? `${apiBase}/admin/stores`
+        : params.section === "products"
+          ? `${apiBase}/admin/products`
+          : null;
+    if (!endpoint) return;
+    fetch(endpoint, { credentials: "include" })
       .then(async (response) => {
         if (!response.ok)
           throw new Error("انتهت الجلسة. سجّل الدخول مرة أخرى.");
         const result = await response.json();
-        setStores(result.stores.map((store: { name: string }) => store.name));
+        if (params.section === "stores") {
+          setStores(result.stores.map((store: { name: string }) => store.name));
+        } else {
+          setProducts(result.products);
+        }
       })
       .catch((loadError: unknown) =>
         setError(
@@ -37,6 +59,45 @@ export default function AdminSectionPage({
         ),
       );
   }, [params.section]);
+
+  async function handleProductSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError("");
+    setMessage("");
+    setSubmitting(true);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const payload: Record<string, FormDataEntryValue | boolean> =
+      Object.fromEntries(formData.entries());
+    payload.isPublished = formData.has("isPublished");
+    payload.isFeatured = formData.has("isFeatured");
+    payload.isDeal = formData.has("isDeal");
+
+    try {
+      const response = await fetch(`${apiBase}/products`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "تعذر حفظ المنتج");
+      form.reset();
+      setMessage("تم حفظ المنتج بنجاح.");
+      const refreshed = await fetch(`${apiBase}/admin/products`, {
+        credentials: "include",
+      });
+      if (!refreshed.ok) throw new Error("تم الحفظ، لكن تعذر تحديث القائمة.");
+      const refreshedResult = await refreshed.json();
+      setProducts(refreshedResult.products);
+    } catch (submitError) {
+      setError(
+        submitError instanceof Error ? submitError.message : "تعذر حفظ المنتج",
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   if (!title)
     return (
@@ -109,6 +170,121 @@ export default function AdminSectionPage({
         ) : (
           <p>جارٍ تحميل المتاجر...</p>
         ))}
+      {params.section === "products" && (
+        <>
+          <form
+            onSubmit={handleProductSubmit}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+              gap: 12,
+              maxWidth: 1000,
+              padding: "20px 0",
+            }}
+          >
+            <label>
+              اسم المنتج
+              <input name="name" required minLength={2} />
+            </label>
+            <label>
+              السعر بالجنيه
+              <input name="price" type="number" min="0" step="0.01" />
+            </label>
+            <label>
+              السعر قبل الخصم
+              <input name="oldPrice" type="number" min="0" step="0.01" />
+            </label>
+            <label>
+              رابط الصورة
+              <input name="imageUrl" type="url" />
+            </label>
+            <label>
+              رابط المنتج أو العمولة
+              <input name="affiliateUrl" type="url" />
+            </label>
+            <label>
+              التصنيف
+              <input name="categoryName" />
+            </label>
+            <label>
+              المتجر
+              <input name="storeName" />
+            </label>
+            <label style={{ gridColumn: "1 / -1" }}>
+              وصف قصير
+              <textarea name="shortDescription" rows={2} />
+            </label>
+            <label style={{ gridColumn: "1 / -1" }}>
+              الوصف الكامل
+              <textarea name="description" rows={3} />
+            </label>
+            <div
+              style={{
+                gridColumn: "1 / -1",
+                display: "flex",
+                flexWrap: "wrap",
+                alignItems: "center",
+                gap: 16,
+              }}
+            >
+              <label>
+                <input name="isPublished" type="checkbox" defaultChecked /> نشر
+                المنتج
+              </label>
+              <label>
+                <input name="isFeatured" type="checkbox" /> منتج مميز
+              </label>
+              <label>
+                <input name="isDeal" type="checkbox" /> عرض
+              </label>
+              <button type="submit" disabled={submitting}>
+                {submitting ? "جارٍ الحفظ..." : "حفظ المنتج"}
+              </button>
+            </div>
+          </form>
+          {message && <p role="status">{message}</p>}
+          {error && <p role="alert">{error}</p>}
+          <div style={{ overflowX: "auto" }}>
+            <table
+              style={{
+                width: "100%",
+                maxWidth: 1000,
+                borderCollapse: "collapse",
+                textAlign: "right",
+              }}
+            >
+              <thead>
+                <tr>
+                  <th>المنتج</th>
+                  <th>السعر</th>
+                  <th>التصنيف</th>
+                  <th>الحالة</th>
+                </tr>
+              </thead>
+              <tbody>
+                {products.map((product) => (
+                  <tr key={product.id}>
+                    <td>{product.name}</td>
+                    <td>
+                      {product.price === null ? "-" : `${product.price} ج`}
+                    </td>
+                    <td>{product.category?.name || "-"}</td>
+                    <td>
+                      {product.isPublished ? "منشور" : "مسودة"}
+                      {product.isDeal ? " · عرض" : ""}
+                    </td>
+                  </tr>
+                ))}
+                {!products.length && (
+                  <tr>
+                    <td colSpan={4}>لا توجد منتجات بعد.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
     </main>
   );
 }

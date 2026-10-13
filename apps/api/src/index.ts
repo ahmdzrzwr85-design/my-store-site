@@ -14,6 +14,10 @@ const app = express();
 const prisma = new PrismaClient();
 const port = Number(process.env.PORT || 4000);
 const sessionCookie = "zz_admin_session";
+const allowedOrigins = (process.env.WEB_ORIGIN || "http://localhost:3000")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
 const signSession = () => {
   const secret = process.env.ADMIN_PASSWORD;
@@ -81,7 +85,13 @@ const slugFromText = (value: string, fallback: string) => {
 
 app.use(
   cors({
-    origin: process.env.WEB_ORIGIN || "http://localhost:3000",
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+      callback(new Error("Origin not allowed"));
+    },
     credentials: true,
   }),
 );
@@ -141,6 +151,19 @@ app.get("/api/admin/stores", requireAdmin, async (_req, res) => {
   } catch (error) {
     console.error("Failed to load stores", error);
     res.status(500).json({ error: "تعذر تحميل المتاجر" });
+  }
+});
+
+app.get("/api/admin/products", requireAdmin, async (_req, res) => {
+  try {
+    const products = await prisma.product.findMany({
+      include: { category: true, store: true },
+      orderBy: { createdAt: "desc" },
+    });
+    res.json({ products });
+  } catch (error) {
+    console.error("Failed to load admin products", error);
+    res.status(500).json({ error: "تعذر تحميل المنتجات" });
   }
 });
 
