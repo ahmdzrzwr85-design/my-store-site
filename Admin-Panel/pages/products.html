@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>إدارة المنتجات | ZAR ZOR</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../Front-End/css/style.css" />
+    <link rel="stylesheet" href="../css/admin.css" />
+  </head>
+  <body class="admin-body">
+    <aside class="admin-sidebar">
+      <h2>ZAR ZOR</h2>
+      <nav>
+        <a href="dashboard.html">لوحة التحكم</a>
+        <a class="active" href="products.html">المنتجات</a>
+        <a href="categories.html">التصنيفات</a>
+        <a href="stores.html">المتاجر</a>
+        <a href="offers.html">العروض</a>
+        <a href="analytics.html">التحليلات</a>
+      </nav>
+    </aside>
+
+    <main class="admin-main">
+      <div class="admin-topbar">
+        <h1>إدارة المنتجات</h1>
+        <span class="admin-api-status" id="api-status"
+          >جاري الاتصال بقاعدة البيانات...</span
+        >
+      </div>
+
+      <form class="admin-form" id="product-form">
+        <div class="admin-form-heading">
+          <h2>إضافة منتج إلكترونيات</h2>
+          <p>أدخل بيانات المنتج ورابط العمولة ليظهر في الكتالوج بعد النشر.</p>
+        </div>
+        <div class="admin-form-grid">
+          <label
+            >اسم المنتج<input
+              name="name"
+              required
+              minlength="2"
+              placeholder="مثال: سماعات لاسلكية"
+          /></label>
+          <label
+            >السعر بالجنيه<input
+              name="price"
+              type="number"
+              min="0"
+              step="0.01"
+              placeholder="999"
+          /></label>
+          <label
+            >السعر قبل الخصم<input
+              name="oldPrice"
+              type="number"
+              min="0"
+              step="0.01"
+              placeholder="1599"
+          /></label>
+          <label
+            >رابط صورة المنتج<input
+              name="imageUrl"
+              type="url"
+              placeholder="https://..."
+          /></label>
+          <label
+            >رابط المنتج أو رابط العمولة<input
+              name="affiliateUrl"
+              type="url"
+              placeholder="https://store.example/product"
+          /></label>
+          <label
+            >التصنيف<input name="categoryName" placeholder="مثال: موبايلات"
+          /></label>
+          <label
+            >المتجر<input name="storeName" placeholder="مثال: Amazon"
+          /></label>
+          <label class="full-field"
+            >وصف قصير<textarea
+              name="shortDescription"
+              rows="2"
+              placeholder="وصف مختصر يظهر في بطاقة المنتج"
+            ></textarea>
+          </label>
+          <label class="full-field"
+            >الوصف الكامل<textarea
+              name="description"
+              rows="4"
+              placeholder="مواصفات ومميزات المنتج"
+            ></textarea>
+          </label>
+        </div>
+        <div class="admin-form-options">
+          <label
+            ><input name="isPublished" type="checkbox" checked /> نشر
+            المنتج</label
+          >
+          <label><input name="isFeatured" type="checkbox" /> منتج مميز</label>
+          <label><input name="isDeal" type="checkbox" /> عليه عرض</label>
+          <button class="btn btn-primary" type="submit">حفظ المنتج</button>
+        </div>
+        <p class="admin-form-message" id="form-message" role="status"></p>
+      </form>
+
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>المنتج</th>
+            <th>السعر</th>
+            <th>الخصم</th>
+            <th>التصنيف</th>
+            <th>الحالة</th>
+          </tr>
+        </thead>
+        <tbody id="products-table-body">
+          <tr>
+            <td colspan="5">جاري تحميل المنتجات...</td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+    <script src="../js/admin-products.js"></script>
+  </body>
+</html>

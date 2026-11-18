@@ -1,0 +1,217 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+}
+
+model AdminUser {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  passwordHash String
+  name         String
+  role         AdminRole  @default(EDITOR)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  auditLogs    AuditLog[]
+}
+
+model Category {
+  id             String        @id @default(cuid())
+  name           String
+  slug           String        @unique
+  description    String?
+  imageUrl       String?
+  seoTitle       String?
+  seoDescription String?
+  isActive       Boolean       @default(true)
+  subcategories  Subcategory[]
+  products       Product[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([isActive])
+}
+
+model Subcategory {
+  id         String    @id @default(cuid())
+  name       String
+  slug       String    @unique
+  categoryId String
+  category   Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  products   Product[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@index([categoryId])
+}
+
+model Brand {
+  id        String    @id @default(cuid())
+  name      String
+  slug      String    @unique
+  website   String?
+  logoUrl   String?
+  isActive  Boolean   @default(true)
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([isActive])
+}
+
+model Store {
+  id                String    @id @default(cuid())
+  name              String
+  slug              String    @unique
+  website           String?
+  affiliateUrl      String?
+  logoUrl           String?
+  defaultDisclosure String?
+  isActive          Boolean   @default(true)
+  products          Product[]
+  deals             Deal[]
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([isActive])
+}
+
+model Product {
+  id               String       @id @default(cuid())
+  name             String
+  slug             String       @unique
+  description      String?
+  shortDescription String?
+  price            Float?
+  oldPrice         Float?
+  currency         String       @default("EGP")
+  imageUrl         String?
+  additionalImages Json?
+  rating           Float?
+  reviewCount      Int          @default(0)
+  specifications   Json?
+  pros             Json?
+  cons             Json?
+  affiliateUrl     String?
+  seoTitle         String?
+  seoDescription   String?
+  seoKeywords      String?
+  isPublished      Boolean      @default(false)
+  isFeatured       Boolean      @default(false)
+  isDeal           Boolean      @default(false)
+  isActive         Boolean      @default(true)
+  categoryId       String?
+  category         Category?    @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  subcategoryId    String?
+  subcategory      Subcategory? @relation(fields: [subcategoryId], references: [id], onDelete: SetNull)
+  brandId          String?
+  brand            Brand?       @relation(fields: [brandId], references: [id], onDelete: SetNull)
+  storeId          String?
+  store            Store?       @relation(fields: [storeId], references: [id], onDelete: SetNull)
+  deals            Deal[]
+  clicks           Click[]
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  @@index([categoryId, isPublished, isActive])
+  @@index([brandId])
+  @@index([storeId])
+  @@index([isFeatured, isDeal])
+}
+
+model Deal {
+  id            String    @id @default(cuid())
+  title         String
+  description   String?
+  affiliateUrl  String
+  originalPrice Float?
+  dealPrice     Float?
+  startsAt      DateTime?
+  expiresAt     DateTime?
+  isActive      Boolean   @default(true)
+  productId     String?
+  product       Product?  @relation(fields: [productId], references: [id], onDelete: SetNull)
+  storeId       String?
+  store         Store?    @relation(fields: [storeId], references: [id], onDelete: SetNull)
+  clicks        Click[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([isActive, startsAt, expiresAt])
+}
+
+model Article {
+  id               String    @id @default(cuid())
+  title            String
+  slug             String    @unique
+  excerpt          String?
+  featuredImageUrl String?
+  content          String
+  author           String?
+  isPublished      Boolean   @default(false)
+  publishedAt      DateTime?
+  seoTitle         String?
+  seoDescription   String?
+  seoKeywords      String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@index([isPublished, publishedAt])
+}
+
+model AffiliateLink {
+  id          String   @id @default(cuid())
+  name        String
+  destination String
+  code        String   @unique
+  isActive    Boolean  @default(true)
+  clicks      Click[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Click {
+  id              String         @id @default(cuid())
+  productId       String?
+  product         Product?       @relation(fields: [productId], references: [id], onDelete: SetNull)
+  affiliateLinkId String?
+  affiliateLink   AffiliateLink? @relation(fields: [affiliateLinkId], references: [id], onDelete: SetNull)
+  dealId          String?
+  deal            Deal?          @relation(fields: [dealId], references: [id], onDelete: SetNull)
+  referrer        String?
+  userAgent       String?
+  deviceType      String?
+  country         String?
+  sessionId       String?
+  createdAt       DateTime       @default(now())
+
+  @@index([createdAt])
+  @@index([productId])
+}
+
+model SiteSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+model AuditLog {
+  id        String     @id @default(cuid())
+  action    String
+  entity    String
+  entityId  String?
+  details   String?
+  adminId   String?
+  admin     AdminUser? @relation(fields: [adminId], references: [id], onDelete: SetNull)
+  createdAt DateTime   @default(now())
+}
